@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+// 新規登録時にusersテーブルに情報を保存するためのapi
+Route::post('/register', 'UserController@register');
