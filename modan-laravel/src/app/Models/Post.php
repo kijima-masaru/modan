@@ -20,11 +20,13 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Likeとの関連を定義(1対0もしくは多)
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
 
+    // Commentとの関連を定義(1対0もしくは多)
     public function comments()
     {
         return $this->hasMany(Comment::class);
