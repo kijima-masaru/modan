@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Like extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'post_id'
+    ];
+
+    // 外部キーであるuser_idの設定
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // 外部キーであるpost_idの設定
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'post_id');
+    }
 }
