@@ -1,5 +1,6 @@
 <template>
   <div class="register">
+  <AuthHeader />
     <label
       >ユーザーネーム： <input v-model="username" type="text" required
     /></label>
@@ -13,8 +14,6 @@
     /></label>
     <br />
     <button @click="register">新規登録</button>
-    <br />
-    <NuxtLink to="/">戻る</NuxtLink>
   </div>
 </template>
 
