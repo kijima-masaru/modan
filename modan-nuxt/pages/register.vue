@@ -18,58 +18,60 @@
 </template>
 
 <script>
-import axios from 'axios';
 import firebase from "~/plugins/firebase";
-
+import axios from 'axios';
 export default {
   data() {
     return {
-      username: "",
       email: null,
       password: null,
+      username: null,
     };
   },
   methods: {
-    async register() {
-      if (!this.email || !this.password || !this.username) {
-        alert("ユーザーネーム、メールアドレスまたはパスワードが入力されていません。");
+    register() {
+      if (!this.email || !this.password) {
+        alert("メールアドレスまたはパスワードが入力されていません。");
         return;
       }
-      
-      try {
-        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
-        const user = firebase.auth().currentUser;
-        
-        await user.sendEmailVerification();
-        
-        // Firebaseの認証に成功した後、Laravelのエンドポイントにリクエスト
-        const response = await axios.post('/api/register', {
-            username: this.username,
-            email: this.email,
-            password: this.password
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((data) => {
+          data.user.sendEmailVerification().then(() => {
+            // Laravel APIを呼び出してDBに保存
+            axios.post('/api/register', {
+                username: this.username,
+                email: this.email,
+                password: this.password
+            }).then(response => {
+                if (response.status === 201) {
+                    alert('DBへの保存に成功しました！');
+                    this.$router.replace("/confirm");
+                }
+            }).catch(error => {
+                alert('DBへの保存中にエラーが発生しました');
+            });
+          });
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case "auth/invalid-email":
+              alert("メールアドレスの形式が違います。");
+              break;
+            case "auth/email-already-in-use":
+              alert("このメールアドレスはすでに使われています。");
+              break;
+            case "auth/weak-password":
+              alert("パスワードは6文字以上で入力してください。");
+              break;
+            default:
+              alert("エラーが起きました。しばらくしてから再度お試しください。");
+              break;
+          }
         });
-
-        if(response.data.message === 'Successfully registered!') {
-            this.$router.replace("/confirm");
-        }
-      } catch (error) {
-        switch (error.code) {
-          case "auth/invalid-email":
-            alert("メールアドレスの形式が違います。");
-            break;
-          case "auth/email-already-in-use":
-            alert("このメールアドレスはすでに使われています。");
-            break;
-          case "auth/weak-password":
-            alert("パスワードは6文字以上で入力してください。");
-            break;
-          default:
-            alert("エラーが起きました。しばらくしてから再度お試しください。");
-            break;
-        }
-      }
     },
-  },
+}
 };
 </script>
 
@@ -128,4 +130,3 @@ button:hover {
 }
 
 </style>
-
