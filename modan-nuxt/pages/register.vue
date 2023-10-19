@@ -1,19 +1,20 @@
 <template>
-  <div class="container">
-    <div class="title-container">
-      <img src="path_to_your_image" alt="Share" class="title-image"/> <!-- ① -->
-    </div>
-    <div class="nav-links">
-      <a href="/register">新規登録</a> <!-- ② -->
-      <a href="/login">ログイン</a> <!-- ③ -->
-    </div>
-    <div class="registration-container">
-      <h2>新規登録タイトル</h2> <!-- ④ -->
-      <input type="text" placeholder="ユーザーネーム" v-model="username"/> <!-- ⑤ -->
-      <input type="email" placeholder="メールアドレス" v-model="email"/> <!-- ⑥ -->
-      <input type="password" placeholder="パスワード" v-model="password"/> <!-- ⑦ -->
-      <button @click="register">新規登録</button> <!-- ⑧ -->
-    </div>
+  <div class="register">
+    <label
+      >ユーザーネーム： <input v-model="username" type="text" required
+    /></label>
+    <br />
+    <label
+      >メールアドレス： <input v-model="email" type="email" required
+    /></label>
+    <br />
+    <label
+      >パスワード： <input v-model="password" type="password" required
+    /></label>
+    <br />
+    <button @click="register">新規登録</button>
+    <br />
+    <NuxtLink to="/">戻る</NuxtLink>
   </div>
 </template>
 
@@ -23,9 +24,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      username: null,
       email: null,
       password: null,
-      username: null,
     };
   },
   methods: {
@@ -39,19 +40,10 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((data) => {
           data.user.sendEmailVerification().then(() => {
-            // Laravel APIを呼び出してDBに保存
-            axios.post('/api/register', {
-                username: this.username,
-                email: this.email,
-                password: this.password
-            }).then(response => {
-                if (response.status === 201) {
-                    alert('DBへの保存に成功しました！');
-                    this.$router.replace("/confirm");
-                }
-            }).catch(error => {
-                alert('DBへの保存中にエラーが発生しました');
-            });
+            this.$router.replace("/confirm");
+
+            // ここでLaravel APIを呼び出す
+            this.saveToLaravelDB(data.user.uid);
           });
         })
         .catch((error) => {
@@ -71,8 +63,28 @@ export default {
           }
         });
     },
-}
-};
+    saveToLaravelDB(uid) {   // このメソッドの前に、カンマが不足していました。
+      // ここでaxiosや別のHTTPクライアントを使用して、LaravelのAPIを呼び出し、
+      // ユーザー情報をusersテーブルに保存します。
+      // APIのエンドポイントとリクエストの形式に応じて、以下のコードを調整してください。
+
+      const payload = {
+        uid: uid,
+        name: this.username,
+        email: this.email,
+        password: this.password // 実際にはパスワードは送信しないようにすることをおすすめします。
+      };
+
+      axios.post('http://localhost/api/register', payload)
+        .then(response => {
+          console.log('User saved to Laravel DB:', response.data);
+        })
+        .catch(error => {
+          console.error('Error saving user to Laravel DB:', error);
+        });
+      },
+    },
+  };
 </script>
 
 <style scoped>
