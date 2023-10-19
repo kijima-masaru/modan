@@ -1,7 +1,8 @@
 <template>
   <div class="sidebar">
     <h1>SHARE</h1>
-    <div class="menu-item">ホーム</div>
+    <!-- ホームをクリックしたら redirectToPosts 関数を実行するようにします -->
+    <div class="menu-item" @click="redirectToPosts">ホーム</div>
     <div class="menu-item" @click="logout">ログアウト</div>
     <div class="post-box">
       <textarea placeholder="シェア"></textarea>
@@ -23,6 +24,10 @@ export default {
         .catch((error) => {
           console.error('ログアウトに失敗しました:', error);
         });
+    },
+    // ホームをクリックしたら posts_id.vue にリダイレクトする関数を追加します
+    redirectToPosts() {
+      this.$router.push('/posts_id');
     }
   }
 }
