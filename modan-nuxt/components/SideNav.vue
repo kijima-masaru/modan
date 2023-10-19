@@ -19,7 +19,7 @@ export default {
     logout() {
       firebase.auth().signOut()
         .then(() => {
-          this.$router.push('/');
+          this.$router.push('/login');
         })
         .catch((error) => {
           console.error('ログアウトに失敗しました:', error);

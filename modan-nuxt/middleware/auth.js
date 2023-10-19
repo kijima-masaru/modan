@@ -11,7 +11,7 @@ export default function ({ route, redirect }) {
     // ログイン済みの場合の制御
     else {
       if (route.path === '/login' || route.path === '/register' || route.path === '/confirm') {
-        redirect('/index')
+        redirect('/')
       }
     }
   })
