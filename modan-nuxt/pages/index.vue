@@ -1,53 +1,29 @@
 <template>
-  <div id="post-page">
-    <SideNav />
-    <div class="content-area">
-      <h2>ホーム</h2>
-      <Message 
-        v-for="post in posts" 
-        :key="post.id" 
-        :username="post.username" 
-        :content="post.content" 
-        :likes="post.likes"
-      />
-    </div>
-  </div>
+<div class="container">
+<h1>ホーム</h1>
+<p>{{ message }}</p>
+<NuxtLink to="/register">新規登録</NuxtLink>
+<br />
+<NuxtLink to="/login">ログイン</NuxtLink>
+<br />
+<NuxtLink to="/logout">ログアウト</NuxtLink>
+</div>
 </template>
 
 <script>
-import SideNav from '@/components/SideNav.vue'
-import Message from '@/components/Message.vue'
-
+import firebase from '~/plugins/firebase'
 export default {
-  components: {
-    SideNav,
-    Message
-  },
-  data() {
-    return {
-      posts: [
-        {
-          id: 1,
-          username: "test1",
-          content: "test",
-          likes: 10
-        }
-        // 他の投稿データもここに
-      ]
-    }
-  }
+data() {
+return {
+message: 'ログインができておりません',
+}
+},
+created() {
+firebase.auth().onAuthStateChanged((user) => {
+if (user) {
+this.message = 'ログイン済みです'
+}
+})
+},
 }
 </script>
-
-<style scoped>
-#post-page {
-  display: flex;
-}
-
-.content-area {
-  flex: 1;
-  background-color: #34495e;
-  padding: 20px;
-  color: white;
-}
-</style>

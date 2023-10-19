@@ -35,7 +35,7 @@ firebase
 .signInWithEmailAndPassword(this.email, this.password)
 .then(() => {
 alert('ログインが完了しました')
-this.$router.push('/')
+this.$router.push('/posts_id')
 })
 .catch((error) => {
 switch (error.code) {
