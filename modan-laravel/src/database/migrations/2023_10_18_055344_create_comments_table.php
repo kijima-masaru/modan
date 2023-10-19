@@ -13,7 +13,11 @@ class CresteCommentsTable extends Migration
      */
     public function up()
     {
-        //
+        $table->id();
+        $table->string('content')->nullable();
+        $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+        $table->foreignId('post_id')->constrained('posts')->cascadeOnDelete();
+        $table->timestamps();
     }
 
     /**
