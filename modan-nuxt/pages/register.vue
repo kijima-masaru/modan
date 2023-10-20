@@ -68,7 +68,7 @@ export default {
       // APIのエンドポイントとリクエストの形式に応じて、以下のコードを調整してください。
 
       const payload = {
-        uid: uid,
+        uid: uid, // このuidはfirebase_uidとしてLaravel側で保存します
         name: this.username,
         email: this.email,
         password: this.password // 実際にはパスワードは送信しないようにすることをおすすめします。

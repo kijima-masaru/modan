@@ -17,12 +17,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'uid' => 'required|string|unique:users,firebase_uid',  // Firebase UIDの検証を追加
         ]);
 
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password); // パスワードはハッシュ化して保存
+        $user->password = Hash::make($request->password);
+        $user->firebase_uid = $request->uid;  // Firebase UIDを保存
         $user->save();
 
         return response()->json([
@@ -31,4 +33,3 @@ class UserController extends Controller
         ], 201);
     }
 }
-

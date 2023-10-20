@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // 新規登録時にusersテーブルに情報を保存するためのapi
 Route::post('/register', [UserController::class, 'register']);
+// 投稿時にpostsテーブルに情報を保存するためのapi
+Route::post('/posts', [PostController::class, 'store']);
