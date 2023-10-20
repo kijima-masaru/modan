@@ -18,7 +18,7 @@ export default {
   name: 'SideNav',
   data() {
     return {
-      postContent: ''
+      postContent: '' // テキストエリアの内容を格納するデータプロパティ
     };
   },
   methods: {
@@ -37,19 +37,20 @@ export default {
     async sharePost() {
       const user = firebase.auth().currentUser;
       if (!user) {
-        alert('ログインしてください。');
-        return;
+          alert('ログインしてください。');
+          return;
       }
 
       try {
-        await axios.post('/api/posts', {
-          content: this.postContent,
-          user_id: user.uid
-        });
-        alert('投稿が完了しました');
-        this.postContent = '';
+          await axios.post('http://localhost/api/posts', {
+              content: this.postContent,
+              firebase_uid: user.uid  // firebaseのUIDを送信
+          });
+          alert('投稿が完了しました');
+          this.postContent = ''; // テキストエリアをクリア
       } catch (error) {
-        console.error('投稿に失敗しました:', error);
+          console.error('投稿に失敗しました:', error);
+          alert('投稿に失敗しました。再度お試しください。');
       }
     }
   }

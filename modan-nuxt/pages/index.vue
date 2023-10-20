@@ -3,11 +3,11 @@
     <SideNav />
     <div class="content-area">
       <h2>ホーム</h2>
-      <Message 
-        v-for="post in posts" 
-        :key="post.id" 
-        :username="post.username" 
-        :content="post.content" 
+      <Message
+        v-for="post in posts"
+        :key="post.id"
+        :username="post.username"
+        :content="post.content"
         :likes="post.likes"
       />
     </div>
