@@ -2,39 +2,34 @@
   <div id="post-page">
     <SideNav />
     <div class="content-area">
-      <h2>ホーム</h2>
+      <h1>ホーム</h1>
       <Message
         v-for="post in posts"
         :key="post.id"
         :username="post.username"
         :content="post.content"
-        :likes="post.likes"
       />
     </div>
   </div>
 </template>
 
 <script>
-import SideNav from '@/components/SideNav.vue'
-import Message from '@/components/Message.vue'
+import Message from '~/components/Message.vue'
 
 export default {
   components: {
-    SideNav,
     Message
   },
   data() {
     return {
-      posts: [
-        {
-          id: 1,
-          username: "test1",
-          content: "test",
-          likes: 10
-        }
-        // 他の投稿データもここに
-      ]
-    }
+      posts: []
+    };
+  },
+  async asyncData({ $axios }) {
+    const response = await $axios.get('http://localhost/api/all-posts');
+    return {
+      posts: response.data
+    };
   }
 }
 </script>

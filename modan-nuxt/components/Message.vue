@@ -33,12 +33,16 @@ export default {
 
 <style scoped>
 .message {
+  background-color: #2c3e50;
+  padding: 15px;
   margin-bottom: 20px;
+  border-radius: 5px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .icons span {

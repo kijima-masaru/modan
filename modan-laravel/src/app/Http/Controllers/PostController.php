@@ -28,4 +28,17 @@ class PostController extends Controller
 
         return response()->json(['message' => 'Post created successfully'], 200);
     }
+
+    public function getAllPosts()
+    {
+        $posts = Post::with('user')->get();
+
+        return response()->json($posts->map(function($post) {
+            return [
+                'id' => $post->id,
+                'username' => $post->user->name,
+                'content' => $post->content,
+            ];
+        }));
+    }
 }
