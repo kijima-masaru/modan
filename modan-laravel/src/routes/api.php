@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +25,5 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/posts', [PostController::class, 'store']);
 // 全ての投稿内容を取得・表示するためのルート
 Route::get('/all-posts', [PostController::class, 'getAllPosts']);
-// 投稿にいいねするためのルート
-Route::post('/like', [LikeController::class, 'store']);
-// 投稿のいいねを解除するためのルート
-Route::delete('/unlike', [LikeController::class, 'destroy']);
+// 投稿削除時にpostsテーブルを削除するためのルート
+Route::delete('/post/{id}', [PostController::class, 'deletePost']);

@@ -4,7 +4,7 @@
       <div class="title">{{ username }}</div>
       <div class="icons">
         <span>❤️ {{ likes }}</span>
-        <span>✖️</span>
+        <span @click="deletePost">✖️</span>
       </div>
     </div>
     <div class="content">{{ content }}</div>
@@ -15,6 +15,10 @@
 export default {
   name: 'Message',
   props: {
+  id: {
+      type: Number,
+      required: true
+    },
     username: {
       type: String,
       required: true
@@ -26,6 +30,20 @@ export default {
     likes: {
       type: Number,
       default: 0
+    }
+  },
+  methods: {
+    async deletePost() {
+      try {
+        const response = await this.$axios.delete(`http://localhost/api/post/${this.id}`);
+        if (response.data.message) {
+          this.$emit('postDeleted', this.id); // 削除後に親コンポーネントに通知
+          alert(response.data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while deleting the post.');
+      }
     }
   }
 }

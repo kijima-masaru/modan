@@ -2,34 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Like;
-use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
     public function store(Request $request)
-    {
-        $like = Like::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
+{
+    $firebaseUid = $request->input('userId');
+    $postId = $request->input('postId');
 
-        if (!$like) {
-            $like = new Like;
-            $like->user_id = $request->user_id;
-            $like->post_id = $request->post_id;
-            $like->save();
-        }
+    $user = User::where('firebase_uid', $firebaseUid)->first();
 
-        return response()->json(['message' => 'いいねしました']);
+    if (!$user) {
+        return response()->json(['success' => false, 'message' => 'User not found.']);
     }
 
-    public function destroy(Request $request)
-    {
-        $like = Like::where('user_id', $request->user_id)->where('post_id', $request->post_id)->first();
+    $like = new Like();
+    $like->user_id = $user->id;
+    $like->post_id = $postId;
+    $like->save();
 
-        if ($like) {
-            $like->delete();
-        }
-
-        return response()->json(['message' => 'いいねを解除しました']);
-    }
+    return response()->json(['success' => true]);
 }
+}
+

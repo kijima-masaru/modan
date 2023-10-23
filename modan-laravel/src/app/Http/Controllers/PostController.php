@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    // 投稿作成機能
     public function store(Request $request)
     {
         \Log::info("Request Data:", $request->all());
@@ -29,6 +30,7 @@ class PostController extends Controller
         return response()->json(['message' => 'Post created successfully'], 200);
     }
 
+    // 投稿情報の取得
     public function getAllPosts()
     {
         $posts = Post::with('user')->get();
@@ -40,5 +42,16 @@ class PostController extends Controller
                 'content' => $post->content,
             ];
         }));
+    }
+
+    // 投稿削除機能
+    public function deletePost($id)
+    {
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+        $post->delete();
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 }

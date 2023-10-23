@@ -6,8 +6,10 @@
       <Message
         v-for="post in posts"
         :key="post.id"
+        :id="post.id"
         :username="post.username"
         :content="post.content"
+        @postDeleted="removePost"
       />
     </div>
   </div>
@@ -30,6 +32,11 @@ export default {
     return {
       posts: response.data
     };
+  },
+  methods: {
+    removePost(postId) {
+      this.posts = this.posts.filter(post => post.id !== postId);
+    }
   }
 }
 </script>
